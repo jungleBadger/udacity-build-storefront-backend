@@ -1,20 +1,40 @@
+"use strict";
 
 import * as dotenv from "dotenv";
-let dotEnvProps: any = {"silent": true};
+let dotEnvProps: Object = {"silent": true};
 dotenv.config(dotEnvProps);
 
-import * as express from 'express'
-import * as bodyParser from 'body-parser'
+import { json } from "body-parser"
+import debug from "debug";
+import express = require("express");
+import helmet = require("helmet");
+import morgan = require("morgan");
+import routes from "./routes/routes";
 
-const app: express.Application = express()
+const app: express.Application = express();
+const APP_PORT: Number|String = process.env.APP_PORT || 3030;
+const log: any = debug("app:main");
+const httpLog: any = debug("app:endpoint");
 
+app.use(helmet({
+    "contentSecurityPolicy": false
+}));
+app.use(json());
 
-app.use(bodyParser.json())
+if (httpLog.enabled) {
+    app.use(
+        morgan(
+            "combined",
+            {
+                "stream": {
+                    "write": (msg: String) => httpLog(msg.trimEnd())
+                }
+            }
+        )
+    );
+}
 
-app.get('/', function (req: express.Request, res: express.Response) {
-    res.send('Hello xWorld!')
-})
-
-app.listen(process.env.APP_PORT, function () {
-    console.log(`Server started at port: ${process.env.APP_PORT}`)
-})
+app.listen(APP_PORT, function () {
+    routes(app);
+    log(`Server started at port: ${APP_PORT}`);
+});
