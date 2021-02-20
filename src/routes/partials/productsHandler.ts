@@ -1,6 +1,7 @@
 "use strict";
 
 import {Router, Request, Response} from "express";
+import products from "../../helpers/products";
 const router: Router = Router();
 
 /**
@@ -42,7 +43,7 @@ const router: Router = Router();
  */
 router.get("/",
     async (req: Request, res: Response) => {
-      return res.status(200).send("xx");
+      return res.status(200).send(products.test());
     }
 );
 
