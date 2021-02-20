@@ -5,9 +5,9 @@ const router: Router = Router();
 
 /**
  * @swagger
- * /api/products/:
+ * /api/orders/:
  *   get:
- *     tags: [Products]
+ *     tags: [Users]
  *     summary: Get JPG image as a stream
  *     produces:
  *       - image/jpeg

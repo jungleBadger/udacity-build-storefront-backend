@@ -2,14 +2,15 @@
 
 import {Application, Request, Response} from "express";
 
-
+import ordersHandler from "./partials/ordersHandler";
 import productsHandler from "./partials/productsHandler";
-import * as express from "express";
-
+import usersHandler from "./partials/usersHandler";
 
 export default function (app: Application) {
 
+	app.use("/api/orders", ordersHandler);
 	app.use("/api/products", productsHandler);
+	app.use("/api/users", usersHandler);
 
 	app.use((err: any, req: Request, res: Response, next: any) => {
 		try {
