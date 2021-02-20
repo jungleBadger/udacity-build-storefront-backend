@@ -1,6 +1,8 @@
 "use strict";
 
+import {generateJWT, validateJWT} from "./security";
 import Database from "./Database";
+
 
 let dbObject: any = new Database("postgres", {
     "database": process.env.POSTGRES_DB,
@@ -10,6 +12,7 @@ let dbObject: any = new Database("postgres", {
     "port": process.env.POSTGRES_PORT
 });
 const USERS_COLLECTION = "users";
+
 
 export default {
   "test": async function () {
