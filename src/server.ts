@@ -1,16 +1,20 @@
+
+import * as dotenv from "dotenv";
+let dotEnvProps: any = {"silent": true};
+dotenv.config(dotEnvProps);
+
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 
 const app: express.Application = express()
 
-const address: string = "0.0.0.0:3000"
 
 app.use(bodyParser.json())
 
 app.get('/', function (req: express.Request, res: express.Response) {
-    res.send('Hello World!')
+    res.send('Hello xWorld!')
 })
 
-app.listen(3000, function () {
-    console.log(`starting app on: ${address}`)
+app.listen(process.env.APP_PORT, function () {
+    console.log(`Server started at port: ${process.env.APP_PORT}`)
 })
