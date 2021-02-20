@@ -1,8 +1,8 @@
 {
 	"watch": [
-		"./server/src/*.ts",
-		"./server/src/**/*.ts",
-		"./server/src/*.js"
+		"./src/*.ts",
+		"./src/**/*.ts",
+		"./src/*.js"
 	],
 	"ignore": [
 		".git",
@@ -13,5 +13,5 @@
 	],
 	"verbose": true,
 	"ext": "ts,js,json",
-	"exec": "npm run build:server && cross-env DEBUG=app:* node server/dist/index.js"
+	"exec": "npm run build && cross-env DEBUG=app:* node ./dist/server.js"
 }
