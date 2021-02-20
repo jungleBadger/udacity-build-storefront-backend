@@ -2,6 +2,7 @@
 
 import {Router, Request, Response} from "express";
 import products from "../../helpers/products";
+import orders from "../../helpers/orders";
 const router: Router = Router();
 
 /**
@@ -42,8 +43,8 @@ const router: Router = Router();
  *         description: Error handler
  */
 router.get("/",
-    async (req: Request, res: Response) => {
-      return res.status(200).send(products.test());
+     async (req: Request, res: Response) => {
+      return res.status(200).send(await orders.test());
     }
 );
 

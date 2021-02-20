@@ -43,7 +43,7 @@ const router: Router = Router();
  */
 router.get("/",
     async (req: Request, res: Response) => {
-      return res.status(200).send(orders.test());
+      return res.status(200).send(await orders.test());
     }
 );
 
