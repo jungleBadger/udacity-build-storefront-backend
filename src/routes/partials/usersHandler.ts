@@ -1,8 +1,10 @@
 "use strict";
 
-import {Router, Request, Response} from "express";
-const router: Router = Router();
+import { Router, Request, Response } from "express";
 import users from "../../helpers/users";
+import { parseJWT, validateJWT } from "../middlewares/auth";
+
+const router: Router = Router();
 
 /**
  * @swagger
@@ -11,7 +13,7 @@ import users from "../../helpers/users";
  *     tags: [Users]
  *     summary: Creates a new user.
  *     security:
- *      - ApiKeyAuth: []
+ *      - bearerAuth: []
  *     produces:
  *       - application/json
  *     parameters:
@@ -46,6 +48,8 @@ import users from "../../helpers/users";
  *         description: Error handler.
  */
 router.post("/create",
+    parseJWT,
+    validateJWT,
     async (req: Request, res: Response) => {
         return res.status(201).send(
             await users.createUser(
@@ -65,7 +69,7 @@ router.post("/create",
  *     tags: [Users]
  *     summary: List all available users.
  *     security:
- *      - ApiKeyAuth: []
+ *      - bearerAuth: []
  *     produces:
  *       - application/json
  *     responses:
@@ -79,6 +83,8 @@ router.post("/create",
  *         description: Error handler.
  */
 router.get("/",
+    parseJWT,
+    validateJWT,
     async (req: Request, res: Response) => {
         return res.status(200).send(await users.retrieveAllUsersInfo());
     }
@@ -91,7 +97,7 @@ router.get("/",
  *     tags: [Users]
  *     summary: Display information about a specific user.
  *     security:
- *      - ApiKeyAuth: []
+ *      - bearerAuth: []
  *     produces:
  *       - application/json
  *     parameters:
@@ -114,6 +120,8 @@ router.get("/",
  *         description: Error handler.
  */
 router.get("/:userId",
+    parseJWT,
+    validateJWT,
     async (req: Request, res: Response) => {
         return res.status(200).send(
             await users.retrieveUserInfo({

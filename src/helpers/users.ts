@@ -159,6 +159,10 @@ export default {
                 {
                     ...userObject,
                     "password": undefined
+                },
+                process.env.APP_SECRET,
+                {
+                    "expiresIn": "1 day"
                 }
             );
         } else {

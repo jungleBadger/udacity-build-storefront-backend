@@ -24,6 +24,8 @@ import users from "../../helpers/users";
  */
 router.all("/login",
     async (req: Request, res: Response) => {
+        console.log("AKII")
+        console.log(req.body);
         return res.status(200).send(await users.authorizeUser(
             req.query.username || req.body.username,
             req.query.password || req.body.password
