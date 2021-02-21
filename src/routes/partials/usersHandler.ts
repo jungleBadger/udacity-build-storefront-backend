@@ -47,13 +47,20 @@ import users from "../../helpers/users";
  */
 router.post("/create",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await users.test());
+        return res.status(201).send(
+            await users.createUser(
+                req.body.username,
+                req.body.firstName,
+                req.body.lastName,
+                req.body.password
+            )
+        );
     }
 );
 
 /**
  * @swagger
- * /api/users/:
+ * /api/users/
  *   get:
  *     tags: [Users]
  *     summary: List all available users.
@@ -73,7 +80,7 @@ router.post("/create",
  */
 router.get("/",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await users.test());
+        return res.status(200).send(await users.retrieveAllUsersInfo());
     }
 );
 
@@ -109,7 +116,9 @@ router.get("/",
 router.get("/:userId",
     async (req: Request, res: Response) => {
         return res.status(200).send(
-            await users.fetchUserInfo(Number(req.params.userId))
+            await users.retrieveUserInfo({
+                "id": Number(req.params.userId)
+            })
         );
     }
 );

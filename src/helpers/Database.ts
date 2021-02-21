@@ -51,7 +51,7 @@ class Database {
      * @param {string} [dbConnectionInfo.b64Certificate] - The instance's base 64 certificate.
      * @return {Sequelize} A Sequelize instance {@see https://sequelize.org/master/}
      */
-    private buildConnection(dbType: String, dbConnectionInfo: any) {
+    private buildConnection(dbType: string, dbConnectionInfo: any) {
         let schema = dbSchema.validate({
             "database": dbConnectionInfo.database,
             "username": dbConnectionInfo.username,
@@ -75,7 +75,7 @@ class Database {
             "logging": (
                 Object.prototype.hasOwnProperty.call(dbConnectionInfo, "logging") ?
                     dbConnectionInfo.logging :
-                    ((msg: String) => log(msg))
+                    ((msg: string) => log(msg))
             )
         });
 
@@ -102,7 +102,7 @@ class Database {
      * @param {string} dbConnectionInfo.username - The instance's username.
      * @param {string} dbConnectionInfo.password - The instance's password.
      */
-    constructor(dbType: String, dbConnectionInfo: Object) {
+    constructor(dbType: string, dbConnectionInfo: Object) {
         if (!dbType ||  !dbConnectionInfo) {
             throw new Error(
                 JSON.stringify({

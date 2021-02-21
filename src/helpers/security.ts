@@ -1,6 +1,6 @@
 "use strict";
 
-import { sign, verify, Secret, SignCallback, SignOptions, VerifyOptions, VerifyCallback } from "jsonwebtoken";
+import {sign, verify, Secret, SignCallback, SignOptions, VerifyOptions, VerifyCallback, JwtHeader} from "jsonwebtoken";
 import { hash, compare } from "bcrypt";
 
 
@@ -10,12 +10,12 @@ import { hash, compare } from "bcrypt";
  * @param {string|Buffer|object} rawData - Raw data to build the JWT.
  * @param {string} [secret] - Token to sign the secret, defaults to APP_SECRET env.
  * @param {object} [options] - Token options. {@see https://tools.ietf.org/html/rfc7519#section-4.1}
- * @return {Promise<String|Error>} Containing the hashed token.
+ * @return {Promise<string|Error>} Containing the hashed token.
  */
-export function generateJWT(rawData: object|string = {}, secret: string = "", options: any = {}): Promise<String|Error> {
+export function generateJWT(rawData: object|string = {}, secret: string = "", options: any = {}): Promise<string|Error> {
 	return new Promise((resolve, reject) => {
 
-		let callbackFn = (err: any, token: String): void => {
+		let callbackFn = (err: any, token: string): void => {
 			return err ? reject(err) : resolve(token);
 		};
 
@@ -40,7 +40,7 @@ export function generateJWT(rawData: object|string = {}, secret: string = "", op
  * @throws Will throw a `422 - unprocessable entity` if the token string is malformed.
  * @return {Promise<object|Error>} Containing the result of comparison
  */
-export function validateJWT(token: string, secret = "", options = {}) {
+export function validateJWT(token: string, secret = "", options = {}): Promise<string|Error> {
 	return new Promise((resolve, reject) => {
 
 		if (!token || (!secret && !process.env.APP_SECRET)) {
@@ -77,7 +77,6 @@ export function validateJWT(token: string, secret = "", options = {}) {
 			(secret || process.env.APP_SECRET) as Secret,
 			options as VerifyOptions,
 			verifyCBFunction as unknown as VerifyCallback
-
 		);
 	});
 }
@@ -88,9 +87,9 @@ export function validateJWT(token: string, secret = "", options = {}) {
  * @method generateHash
  * @param {string|Buffer} rawData - Raw data to be hashed.
  * @param {number} [customRounds=10] - Token to sign the secret, defaults to APP_SECRET env.
- * @return {Promise<String|Error>} Containing the hashed token.
+ * @return {Promise<string|Error>} Containing the hashed token.
  */
-export async function generateHash(rawData: string, customRounds: number = 10): Promise<String|Error> {
+export async function generateHash(rawData: string, customRounds: number = 10): Promise<string|Error> {
 	return await hash(
 		rawData,
 		customRounds
@@ -105,7 +104,9 @@ export async function generateHash(rawData: string, customRounds: number = 10): 
  * @param {string} hash - Previously hashed password to be compared.
  * @return {Promise<Boolean|Error>} Containing the hashed token.
  */
-export async function compareHash(rawData: string, hash: string): Promise<Boolean|Error> {
+export async function compareHash(rawData: string, hash: string): Promise<boolean|Error> {
+	console.log(rawData)
+	console.log(hash)
 	return await compare(
 		rawData,
 		hash

@@ -2,12 +2,14 @@
 
 import {Application, Request, Response} from "express";
 
+import authHandler from "./partials/authHandler";
 import ordersHandler from "./partials/ordersHandler";
 import productsHandler from "./partials/productsHandler";
 import usersHandler from "./partials/usersHandler";
 
 export default function (app: Application) {
 
+	app.use("/auth", authHandler);
 	app.use("/api/orders", ordersHandler);
 	app.use("/api/products", productsHandler);
 	app.use("/api/users", usersHandler);

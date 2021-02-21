@@ -3,7 +3,6 @@
 import {Router, Request, Response} from "express";
 const router: Router = Router();
 import products from "../../helpers/products";
-import users from "../../helpers/users";
 
 
 /**
@@ -71,7 +70,7 @@ router.post("/create",
  */
 router.get("/",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await users.test());
+        return res.status(200).send(1);
     }
 );
 
@@ -101,7 +100,7 @@ router.get("/",
  */
 router.get("/:productId",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await users.test());
+        return res.status(200).send(1);
     }
 );
 
@@ -130,7 +129,7 @@ router.get("/:productId",
  */
 router.get("/trending",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await users.test());
+        return res.status(200).send(1);
     }
 );
 
@@ -160,7 +159,7 @@ router.get("/trending",
  */
 router.get("/trending",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await users.test());
+        return res.status(200).send(await products.test());
     }
 );
 
