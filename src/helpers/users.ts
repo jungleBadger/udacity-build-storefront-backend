@@ -11,12 +11,37 @@ let dbObject: any = new Database("postgres", {
     "host": process.env.POSTGRES_HOST_URL,
     "port": process.env.POSTGRES_PORT
 });
-const USERS_COLLECTION = "users";
+
+const userSchema = dbObject.Client.define("user", {
+    "id": {
+        "type": dbObject.DataTypes.NUMBER,
+        "primaryKey": true
+    },
+    "username": dbObject.DataTypes.TEXT,
+    "firstName": dbObject.DataTypes.TEXT,
+    "lastName": dbObject.DataTypes.TEXT,
+    "password": dbObject.DataTypes.TEXT
+});
 
 
 export default {
-  "test": async function () {
-      return await dbObject.Client.query(`SELECT * FROM ${USERS_COLLECTION}`);
-  }
+    "test": async function () {
+        return 1;
+    },
+    "fetchUserInfo": async function (userId: number, acceptNotFound: boolean = false) {
+        let userObject = await userSchema.findOne({
+            "where": {
+                "id": userId
+            }
+        });
 
+        if (!userObject && !acceptNotFound) {
+            throw new Error(JSON.stringify({
+                "status": 404,
+                "message": `User id ${userId} not found.`
+            }))
+        }
+
+        return userObject;
+    }
 };

@@ -79,7 +79,7 @@ router.get("/",
 
 /**
  * @swagger
- * /api/users/:userId:
+ * /api/users/:userId
  *   get:
  *     tags: [Users]
  *     summary: Display information about a specific user.
@@ -108,8 +108,11 @@ router.get("/",
  */
 router.get("/:userId",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await users.test());
+        return res.status(200).send(
+            await users.fetchUserInfo(Number(req.params.userId))
+        );
     }
 );
+
 
 export default router;
