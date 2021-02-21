@@ -4,7 +4,6 @@ import * as dotenv from "dotenv";
 let dotEnvProps: Object = {"silent": true};
 dotenv.config(dotEnvProps);
 
-import { json } from "body-parser"
 import debug from "debug";
 import express = require("express");
 import helmet = require("helmet");
@@ -19,7 +18,7 @@ const httpLog: any = debug("app:endpoint");
 app.use(helmet({
     "contentSecurityPolicy": false
 }));
-app.use(json());
+app.use(express.json());
 
 if (httpLog.enabled) {
     app.use(
