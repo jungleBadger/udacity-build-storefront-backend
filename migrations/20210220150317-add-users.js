@@ -24,6 +24,11 @@ exports.up = function(db) {
       "unique": true,
       "notNull": true
     },
+    "username": {
+      "type": "string",
+      "unique": true,
+      "notNull": true
+    },
     "firstName": {
       "type": "string",
       "unique": false,
@@ -36,6 +41,16 @@ exports.up = function(db) {
     },
     "password": {
       "type": "string",
+      "unique": false,
+      "notNull": true
+    },
+    "createdAt": {
+      "type": "timestamp",
+      "unique": false,
+      "notNull": true
+    },
+    "updatedAt": {
+      "type": "timestamp",
       "unique": false,
       "notNull": true
     }

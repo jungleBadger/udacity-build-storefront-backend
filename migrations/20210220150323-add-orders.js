@@ -41,6 +41,16 @@ exports.up = function(db) {
       "type": "string",
       "unique": false,
       "notNull": true
+    },
+    "createdAt": {
+      "type": "timestamp",
+      "unique": false,
+      "notNull": true
+    },
+    "updatedAt": {
+      "type": "timestamp",
+      "unique": false,
+      "notNull": true
     }
   });
 };

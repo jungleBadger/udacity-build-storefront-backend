@@ -56,11 +56,21 @@ exports.up = function(db) {
       "unique": false,
       "notNull": true,
       "defaultValue": 0
+    },
+    "createdAt": {
+      "type": "timestamp",
+      "unique": false,
+      "notNull": true
+    },
+    "updatedAt": {
+      "type": "timestamp",
+      "unique": false,
+      "notNull": true
     }
   });
 };
 exports.down = function(db) {
-  return null;
+  return db.dropTable("order_items");
 };
 
 exports._meta = {
