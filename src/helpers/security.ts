@@ -1,12 +1,13 @@
 "use strict";
 
+import { sign, verify, Secret, SignCallback, SignOptions, VerifyOptions, VerifyCallback } from "jsonwebtoken";
+import { hash, compare } from "bcrypt";
 
-import {sign, verify, Secret, SignCallback, SignOptions, VerifyOptions, VerifyCallback} from "jsonwebtoken";
 
 /**
  * Generates a JWT applying app configs
  * @method generateJWT
- * @param {string|Buffer|object} rawData - Raw data to be hashed.
+ * @param {string|Buffer|object} rawData - Raw data to build the JWT.
  * @param {string} [secret] - Token to sign the secret, defaults to APP_SECRET env.
  * @param {object} [options] - Token options. {@see https://tools.ietf.org/html/rfc7519#section-4.1}
  * @return {Promise<String|Error>} Containing the hashed token.
@@ -79,4 +80,34 @@ export function validateJWT(token: string, secret = "", options = {}) {
 
 		);
 	});
+}
+
+
+/**
+ * Generates a Hash from a given data.
+ * @method generateHash
+ * @param {string|Buffer} rawData - Raw data to be hashed.
+ * @param {number} [customRounds=10] - Token to sign the secret, defaults to APP_SECRET env.
+ * @return {Promise<String|Error>} Containing the hashed token.
+ */
+export async function generateHash(rawData: string, customRounds: number = 10): Promise<String|Error> {
+	return await hash(
+		rawData,
+		customRounds
+	);
+}
+
+
+/**
+ * Compares raw data with a previously generated hash.
+ * @method compareHash
+ * @param {string|Buffer} rawData - Raw data to be compared.
+ * @param {string} hash - Previously hashed password to be compared.
+ * @return {Promise<Boolean|Error>} Containing the hashed token.
+ */
+export async function compareHash(rawData: string, hash: string): Promise<Boolean|Error> {
+	return await compare(
+		rawData,
+		hash
+	);
 }
