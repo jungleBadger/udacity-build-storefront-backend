@@ -30,7 +30,7 @@ export async function parseJWT(req: any, res: any, next: any) {
 
         throw new Error(JSON.stringify({
             "status": 400,
-            "message": "Token not found - send it through Auth header or signed cookie"
+            "message": "Token not found - send it through Auth header or signed cookie."
         }));
     }
 

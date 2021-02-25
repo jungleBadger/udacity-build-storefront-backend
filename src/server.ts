@@ -1,9 +1,5 @@
 "use strict";
 
-import * as dotenv from "dotenv";
-let dotEnvProps: Object = {"silent": true};
-dotenv.config(dotEnvProps);
-
 import compression = require('compression');
 import cookieParser = require('cookie-parser');
 
@@ -20,23 +16,6 @@ const APP_PORT: number|string = process.env.APP_PORT || 3030;
 const log: any = debug("app:main");
 const httpLog: any = debug("app:endpoint");
 let server: any;
-
-if (process.env.LOCAL_HTTPS) {
-    server = require("https").createServer({
-        "hostname": "localhost",
-        "agent": false,
-        "key": fs.readFileSync("./root/certificates/local/localhost-privkey.pem"),
-        "cert": fs.readFileSync("./root/certificates/local/localhost-cert.pem"),
-        "rejectUnauthorized": false
-    } as object, app);
-} else {
-    server = require("http").createServer(app);
-}
-
-log(`${process.env.LOCAL_HTTPS ? "HTTPS" : "HTTP"} server created`);
-
-
-
 
 app.use(compression());
 app.use(cookieParser(process.env.APP_SECRET));
@@ -63,22 +42,44 @@ if (httpLog.enabled) {
     );
 }
 
-app.listen(APP_PORT, async function () {
-    try {
-        await users.retrieveUserInfo({
-            "username": "admin"
-        });
-        // await users.authorizeUser("admin", process.env.ADMIN_PASSWORD || "admin123");
-    } catch (e) {
-        await users.createUser(
-            "admin",
-            "Daniel",
-            "Abrao",
-            process.env.ADMIN_PASSWORD || "admin123"
-        );
-        log("Default admin user created.");
+
+export function run (CUSTOM_APP_PORT: number = 0, skipAdminAdd: boolean = false) {
+
+    if (process.env.LOCAL_HTTPS) {
+        server = require("https").createServer({
+            "hostname": "localhost",
+            "agent": false,
+            "key": fs.readFileSync("./root/certificates/local/localhost-privkey.pem"),
+            "cert": fs.readFileSync("./root/certificates/local/localhost-cert.pem"),
+            "rejectUnauthorized": false
+        } as object, app);
+    } else {
+        server = require("http").createServer(app);
     }
 
-    routes(app);
-    log(`Server started at port: ${APP_PORT}`);
-});
+    log(`${process.env.LOCAL_HTTPS ? "HTTPS" : "HTTP"} server created`);
+
+    server.listen(CUSTOM_APP_PORT || APP_PORT, async function () {
+        if (!skipAdminAdd) {
+            try {
+                await users.retrieveUserInfo({
+                    "username": process.env.ADMIN_USER || "admin",
+                });
+            } catch (e) {
+                // This is here only for development and testing purposes - of course an admin user wouldn't
+                // be added like this in a "real-world" app.
+                await users.createUser(
+                    process.env.ADMIN_USER || "admin",
+                    "Daniel",
+                    "Abrao",
+                    process.env.ADMIN_PASSWORD || "admin123"
+                );
+                log("Default admin user created.");
+            }
+        }
+
+        routes(app);
+        log(`Server started at port: ${CUSTOM_APP_PORT || APP_PORT}`);
+    });
+    return server;
+}

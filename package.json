@@ -2,14 +2,18 @@
   "name": "storefront_backend",
   "version": "0.1.0",
   "description": "",
-  "main": "dist/server.js",
+  "main": "dist/app.js",
   "scripts": {
-    "test": "jasmine-ts",
-    "build": "tsc src/server.ts -outDir dist",
-    "start": "npm run build && cross-env DEBUG=app:* node dist/server.js",
+    "build": "tsc src/app.ts -outDir dist",
+    "minify": "uglifyjs dist/app.js --compress --mangle --output dist/app.min.js",
     "start:dev": "nodemon",
-    "db:create": "db-migrate up",
-    "db:destroy": "db-migrate reset"
+    "start": "npm run build && cross-env NODE_ENV=dev DEBUG=app:* node dist/app.js",
+    "start:prod": "npm run build && npm run minify && cross-env NODE_ENV=production DEBUG=app:main,app:endpoint node dist/app.min.js",
+    "db:create:test": "cross-env NODE_ENV=test db-migrate up",
+    "db:destroy:test": "cross-env NODE_ENV=test db-migrate reset",
+    "db:create:dev": "cross-env NODE_ENV=dev db-migrate up",
+    "db:destroy:dev": "cross-env NODE_ENV=dev db-migrate reset",
+    "test": "cross-env NODE_ENV=test jasmine-ts"
   },
   "authors": [
     "Udacity",
@@ -20,6 +24,7 @@
     "@types/express": "^4.17.9",
     "@types/pg": "^7.14.7",
     "bcrypt": "^5.0.0",
+    "bent": "^7.3.12",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
@@ -41,11 +46,12 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/bent": "^7.3.2",
     "@types/compression": "^1.7.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cookie-session": "^2.0.42",
     "@types/debug": "^4.1.5",
-    "@types/jasmine": "^3.6.3",
+    "@types/jasmine": "^3.6.4",
     "@types/joi": "^17.2.3",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/morgan": "^1.9.2",
@@ -53,7 +59,8 @@
     "jasmine-spec-reporter": "^6.0.0",
     "jasmine-ts": "^0.3.0",
     "nodemon": "^2.0.7",
-    "ts-node": "^9.1.1",
-    "tsc-watch": "^4.2.9"
+    "ts-node": "^8.10.2",
+    "tsc-watch": "^4.2.9",
+    "uglify-js": "^3.12.8"
   }
 }

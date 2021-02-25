@@ -9,5 +9,15 @@
     "port": {"ENV": "POSTGRES_PORT"},
     "ssl": false,
     "schema": "public"
+  },
+  "test": {
+    "driver": "pg",
+    "user": {"ENV": "TEST_POSTGRES_USER"},
+    "password": {"ENV": "TEST_POSTGRES_PASSWORD"},
+    "host": {"ENV": "TEST_POSTGRES_HOST_URL"},
+    "database": {"ENV": "TEST_POSTGRES_DB"},
+    "port": {"ENV": "TEST_POSTGRES_PORT"},
+    "ssl": false,
+    "schema": "public"
   }
 }

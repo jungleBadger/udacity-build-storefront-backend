@@ -3,12 +3,13 @@
 import { generateHash, compareHash, generateJWT } from "./security";
 import Database from "./Database";
 
+const DB_PREFIX = (process.env.NODE_ENV || "").toLowerCase() === "test" ? "TEST_" : "";
 const dbObject: any = new Database("postgres", {
-    "database": process.env.POSTGRES_DB,
-    "username": process.env.POSTGRES_USER,
-    "password": process.env.POSTGRES_PASSWORD,
-    "host": process.env.POSTGRES_HOST_URL,
-    "port": process.env.POSTGRES_PORT
+    "database": process.env[`${DB_PREFIX}POSTGRES_DB`],
+    "username": process.env[`${DB_PREFIX}POSTGRES_USER`],
+    "password": process.env[`${DB_PREFIX}POSTGRES_PASSWORD`],
+    "host": process.env[`${DB_PREFIX}POSTGRES_HOST_URL`],
+    "port": process.env[`${DB_PREFIX}POSTGRES_PORT`]
 });
 
 interface User {
@@ -18,7 +19,7 @@ interface User {
     lastName: string,
     updatedAt: Date
     password?: string,
-    createdAt?: Date,
+    createdAt?: Date
 }
 
 export default {
@@ -51,6 +52,13 @@ export default {
         lastName: string,
         rawPassword: string
     ): Promise<User|Error> {
+        if (!username || !firstName || !lastName || !rawPassword) {
+           throw new Error(JSON.stringify({
+                "status": 400,
+                "message": "Missing User properties."
+           }));
+        }
+
         const isUserExistent = await this.retrieveUserInfo(
             {
                 username
@@ -65,7 +73,7 @@ export default {
                 "message": `User ${username} already exists`
             }));
         } else {
-            return await (this.User.create({
+            return (await this.User.create({
                 "username": username,
                 "firstName": firstName,
                 "lastName": lastName,
@@ -171,6 +179,30 @@ export default {
                 "message": `Incorrect credentials. Change it, and try again.`
             }));
         }
+    },
 
-    }
+
+    /**
+     * Deletes an existent User.
+     * @method deleteUser
+     * @async
+     * @param {number} userId - User's unique row ID.
+     * @return {Promise<Object|Error>} Containing the created User object.
+     */
+    "deleteUser": async function (
+        userId: number
+    ): Promise<User|Error> {
+        if (!userId) {
+               throw new Error(JSON.stringify({
+                "status": 400,
+                "message": "Missing User ID."
+            }));
+        }
+
+         return await (this.User.destroy({
+             "where": {
+                 "id": userId
+             }
+        }));
+    },
 };

@@ -2,12 +2,13 @@
 
 import Database from "./Database";
 
-let dbObject: any = new Database("postgres", {
-    "database": process.env.POSTGRES_DB,
-    "username": process.env.POSTGRES_USER,
-    "password": process.env.POSTGRES_PASSWORD,
-    "host": process.env.POSTGRES_HOST_URL,
-    "port": process.env.POSTGRES_PORT
+const DB_PREFIX = process.env.NODE_ENV === "TEST" ? "TEST_" : "";
+const dbObject: any = new Database("postgres", {
+    "database": process.env[`${DB_PREFIX}POSTGRES_DB`],
+    "username": process.env[`${DB_PREFIX}POSTGRES_USER`],
+    "password": process.env[`${DB_PREFIX}POSTGRES_PASSWORD`],
+    "host": process.env[`${DB_PREFIX}POSTGRES_HOST_URL`],
+    "port": process.env[`${DB_PREFIX}POSTGRES_PORT`]
 });
 const ORDERS_COLLECTION = "orders";
 

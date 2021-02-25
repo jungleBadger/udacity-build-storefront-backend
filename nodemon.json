@@ -13,5 +13,5 @@
 	],
 	"verbose": true,
 	"ext": "ts,js,json",
-	"exec": "npm run build && cross-env DEBUG=app:* node ./dist/server.js"
+	"exec": "npm run build && cross-env NODE_ENV=dev DEBUG=app:* node ./dist/app.js"
 }
