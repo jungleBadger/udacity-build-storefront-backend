@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable("products", {
+  return db.createTable("categories", {
     "id": {
       "type": "int",
       "primaryKey": true,
@@ -25,13 +25,13 @@ exports.up = function(db) {
     },
     "name": {
       "type": "string",
+      "unique": false,
       "notNull": true
     },
-    "price": {
-      "type": "int"
-    },
-    "category": {
-      "type": "string"
+    "description": {
+      "type": "string",
+      "unique": false,
+      "notNull": false
     },
     "createdAt": {
       "type": "timestamp",
@@ -45,9 +45,8 @@ exports.up = function(db) {
     }
   });
 };
-
 exports.down = function(db) {
-  return db.dropTable("products");
+  return db.dropTable("categories");
 };
 
 exports._meta = {

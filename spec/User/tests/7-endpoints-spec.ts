@@ -14,10 +14,7 @@ import {Op} from "sequelize";
 
 const APP_PORT = 6096;
 const API_URL = `${process.env.LOCAL_HTTPS ? "https" : "http"}://localhost:${APP_PORT}/api`;
-const server = run(
-    APP_PORT,
-    true
-);
+let server: any;
 
 let user1: any;
 const user1Password: string = "123456";
@@ -30,6 +27,12 @@ let validToken: string;
 describe("[User] - endpoints testing", function() {
 
     beforeAll(async () => {
+
+         server = await run(
+            APP_PORT,
+            true
+        );
+
         // create base admin user
         user1 = await users.createUser(
             `${Date.now()}_TEST_SAMPLE_01`,

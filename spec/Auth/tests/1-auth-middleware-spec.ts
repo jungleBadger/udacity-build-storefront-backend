@@ -12,13 +12,19 @@ import users from "../../../src/helpers/users";
 
 const APP_PORT = 6090;
 const API_URL = `${process.env.LOCAL_HTTPS ? "https" : "http"}://localhost:${APP_PORT}/api`;
-const server = run(
-    APP_PORT,
-    false
-);
+let server: any;
 
 
 describe("Endpoints testing", function() {
+
+    beforeAll(async (done) => {
+        server = await run(
+            APP_PORT,
+            false
+        );
+        return done();
+    });
+
 
     describe("Unauthenticated requests", function () {
         it("should respond with an error if JWT is unavailable", async (done) => {
