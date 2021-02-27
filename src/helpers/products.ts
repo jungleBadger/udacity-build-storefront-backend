@@ -12,9 +12,36 @@ const dbObject: any = new Database("postgres", {
 });
 const PRODUCTS_COLLECTION = "products";
 
+interface Product {
+    id: number,
+    name: string,
+    price: number,
+    category: string
+}
+
 export default {
-  "test": async function () {
-      return await dbObject.Client.query(`SELECT * FROM ${PRODUCTS_COLLECTION}`);
-  }
+    "test": async function () {
+        return await dbObject.Client.query(`SELECT * FROM ${PRODUCTS_COLLECTION}`);
+    },
+
+    createProduct() {
+
+    },
+
+    retrieveProductInfo() {
+
+    },
+
+    retrieveAllProductsInfo() {
+
+    },
+
+    retrieveProductsByCategory() {
+
+    },
+
+    retrieveTrendingProducts() {
+
+    }
 
 };
