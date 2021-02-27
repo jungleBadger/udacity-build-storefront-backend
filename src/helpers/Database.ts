@@ -1,7 +1,7 @@
 "use strict";
 
 import debug from "debug";
-import {Sequelize, DataTypes} from "sequelize";
+import {Sequelize, DataTypes, Op} from "sequelize";
 
 const log: any = debug("app:helpers:database");
 import * as Joi from "joi";
@@ -36,6 +36,14 @@ class Database {
      * @public
      */
     public DataTypes: any = DataTypes;
+
+    /**
+     * Hold the valid Operators
+     *
+     * @memberOf Database
+     * @public
+     */
+    public Op: any = Op;
 
     /**
      * Create a new Database instance using the provided connection info returning a Sequelize instance.

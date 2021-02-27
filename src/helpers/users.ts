@@ -36,6 +36,7 @@ export default {
         "password": dbObject.DataTypes.TEXT
     }),
 
+
     /**
      * Creates a new User.
      * @method compareHash
@@ -70,7 +71,7 @@ export default {
         if (isUserExistent) {
             throw new Error(JSON.stringify({
                 "status": 409,
-                "message": `User ${username} already exists`
+                "message": `User ${username} already exists.`
             }));
         } else {
             return (await this.User.create({
@@ -82,17 +83,25 @@ export default {
         }
     },
 
+
     /**
      * Retrieves all User objects.
      * @method retrieveAllUsersInfo
      * @async
+     * @param {number} [limit=10] - Limit the number of items in the result set.
+     * @param {number} [offset=0] - Skip entries to support pagination.
+     * @param {string|Array<string>} [orderBy=["username", "ASC"]] - Sort the results as demonstrated in Sequelize doc {@see https://sequelize.org/master/manual/model-querying-basics.html#ordering}.
      * @return {Promise<Array<User>|Error>} Array containing a list of User objects.
      */
-    "retrieveAllUsersInfo": async function() {
+    "retrieveAllUsersInfo": async function(limit: number = 10, offset: number = 0, orderBy: string|Array<string> = ["username", "ASC"]) {
         return await this.User.findAll({
+            "limit": limit,
+            "offset": offset,
+            "order": [orderBy],
             "attributes": {"exclude": ["password"]}
         });
     },
+
 
     /**
      * Retrieves a single User object based on a query.
@@ -115,7 +124,7 @@ export default {
         if (!query || (!query.id && !query.username)) {
             throw new Error(JSON.stringify({
                 "status": 400,
-                "message": "Invalid query options"
+                "message": "Invalid query options."
             }));
         }
 
@@ -138,6 +147,43 @@ export default {
         }
     },
 
+
+    /**
+     * Deletes an existent User.
+     * @method deleteUser
+     * @async
+     * @param {number} userId - User's unique row ID.
+     * @return {Promise<string|Error>} Containing the created User object.
+     */
+    "deleteUser": async function (
+        userId: number
+    ): Promise<string|Error> {
+        if (!userId) {
+               throw new Error(JSON.stringify({
+                "status": 400,
+                "message": "Missing User ID."
+            }));
+        }
+
+         let operationStatus = await (this.User.destroy({
+             "where": {
+                 "id": userId
+             }
+        }));
+
+        if (operationStatus) {
+            return `User ${userId} deleted.`;
+        } else {
+            throw new Error(JSON.stringify({
+                "status": 404,
+                "message": `User ${userId} not found.`
+            }));
+        }
+
+
+    },
+
+
     /**
      * Create a JWT string upon user authentication.
      * @method authorizeUser
@@ -146,10 +192,16 @@ export default {
      * @param {string} rawPassword - User's raw password - this will be compared against the stored hash.
      * @return {Promise<String|Error>} JWT string representing the User object and permissions.
      */
-    async authorizeUser(
+    "authorizeUser": async function(
         username: string,
         rawPassword: string
     ): Promise<string|Error> {
+        if (!username || !rawPassword) {
+            throw new Error(JSON.stringify({
+                "status": 400,
+                "message": "Missing parameters to authorize user."
+            }));
+        }
         const userObject: any = await this.retrieveUserInfo(
             {
                 username
@@ -170,39 +222,14 @@ export default {
                 },
                 process.env.APP_SECRET,
                 {
-                    "expiresIn": "1 day"
+                    "expiresIn": "5 minutes"
                 }
             );
         } else {
             throw new Error(JSON.stringify({
                 "status": 401,
-                "message": `Incorrect credentials. Change it, and try again.`
+                "message": `Incorrect credentials. Modify it, and try again.`
             }));
         }
-    },
-
-
-    /**
-     * Deletes an existent User.
-     * @method deleteUser
-     * @async
-     * @param {number} userId - User's unique row ID.
-     * @return {Promise<Object|Error>} Containing the created User object.
-     */
-    "deleteUser": async function (
-        userId: number
-    ): Promise<User|Error> {
-        if (!userId) {
-               throw new Error(JSON.stringify({
-                "status": 400,
-                "message": "Missing User ID."
-            }));
-        }
-
-         return await (this.User.destroy({
-             "where": {
-                 "id": userId
-             }
-        }));
-    },
+    }
 };

@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 let dotEnvProps: Object = {};
 dotenv.config(dotEnvProps);
 import users from "../../../src/helpers/users";
+import {Op} from "sequelize";
 
 const VALID_MODEL: any = {
     "username": `${Date.now()}_USER`,
@@ -28,9 +29,13 @@ describe("[User] - createUser method testing", function() {
 
     afterAll(async () => {
         // delete base admin user
-        await users.deleteUser(
-            createdUserModel.id
-        );
+        await users.User.destroy({
+            "where": {
+                "username": {
+                    [Op.ne]: "admin"
+                }
+            }
+        });
     });
 
 
@@ -113,7 +118,7 @@ describe("[User] - createUser method testing", function() {
         } catch (e) {
             expect(e).toEqual(new Error(JSON.stringify({
                 "status": 409,
-                "message": `User ${VALID_MODEL.username} already exists`
+                "message": `User ${VALID_MODEL.username} already exists.`
             })));
             return done();
         }

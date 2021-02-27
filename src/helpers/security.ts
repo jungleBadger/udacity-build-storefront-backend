@@ -105,8 +105,6 @@ export async function generateHash(rawData: string, customRounds: number = 10): 
  * @return {Promise<Boolean|Error>} Containing the hashed token.
  */
 export async function compareHash(rawData: string, hash: string): Promise<boolean|Error> {
-	console.log(rawData)
-	console.log(hash)
 	return await compare(
 		rawData,
 		hash

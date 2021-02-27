@@ -56,7 +56,7 @@ router.post("/create",
                 req.body.username,
                 req.body.firstName,
                 req.body.lastName,
-                req.body.password
+                req.body.rawPassword || req.body.password
             )
         );
     }
@@ -127,6 +127,46 @@ router.get("/:userId",
             await users.retrieveUserInfo({
                 "id": Number(req.params.userId)
             })
+        );
+    }
+);
+
+
+/**
+ * @swagger
+ * /api/users/:userId
+ *   delete:
+ *     tags: [Users]
+ *     summary: Delete a specific user.
+ *     security:
+ *      - bearerAuth: []
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *      - name: userId
+ *        in: path
+ *        required: true
+ *        description: The User's ID.
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: Operation status.
+ *       401:
+ *         description: Invalid API token.
+ *       403:
+ *         description: Expired or denied API token.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Error handler.
+ */
+router.delete("/:userId",
+    parseJWT,
+    validateJWT,
+    async (req: Request, res: Response) => {
+        return res.status(200).send(
+            await users.deleteUser(Number(req.params.userId))
         );
     }
 );
