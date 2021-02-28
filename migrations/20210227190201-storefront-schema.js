@@ -8,7 +8,7 @@ const categoriesTable = require("./partials/1-add-categories");
 const productsTable = require("./partials/2-add-products");
 const usersTable = require("./partials/3-add-users");
 const ordersTable = require("./partials/4-add-orders");
-const orderItemsTable = require("./partials/5-add-order-items");
+const orderItemsTable = require("./partials/5-add-order-products");
 
 
 /**

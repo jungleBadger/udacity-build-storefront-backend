@@ -4,6 +4,11 @@ var dbm;
 var type;
 var seed;
 
+const TABLE_NAME = "orderProduct";
+const PRODUCTS_TABLE_NAME = require("./2-add-products").TABLE_NAME;
+const ORDERS_TABLE_NAME = require("./4-add-orders").TABLE_NAME;
+exports.TABLE_NAME = TABLE_NAME;
+
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
   * This enables us to not have to rely on NODE_PATH.
@@ -15,7 +20,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable("order_items", {
+  return db.createTable(TABLE_NAME, {
     "id": {
       "type": "int",
       "primaryKey": true,
@@ -23,27 +28,13 @@ exports.up = function(db) {
       "unique": true,
       "notNull": true
     },
-    "order_id": {
-      "type": "int",
-      "unique": false,
-      "notNull": true,
-      "foreignKey": {
-        "name": "order_id_fk",
-        "table": "orders",
-        "rules": {
-          "onDelete": "CASCADE",
-          "onUpdate": "RESTRICT"
-        },
-        "mapping": "id"
-      }
-    },
-    "product_id": {
+    "productId": {
       "type": "int",
       "unique": false,
       "notNull": true,
       "foreignKey": {
         "name": "product_id_fk",
-        "table": "products",
+        "table": PRODUCTS_TABLE_NAME,
         "rules": {
           "onDelete": "CASCADE",
           "onUpdate": "RESTRICT"
@@ -51,11 +42,25 @@ exports.up = function(db) {
         "mapping": "id"
       }
     },
-    "product_quantity": {
+    "productQuantity": {
       "type": "int",
       "unique": false,
       "notNull": true,
       "defaultValue": 0
+    },
+     "orderId": {
+      "type": "int",
+      "unique": false,
+      "notNull": true,
+      "foreignKey": {
+        "name": "order_id_fk",
+        "table": ORDERS_TABLE_NAME,
+        "rules": {
+          "onDelete": "CASCADE",
+          "onUpdate": "RESTRICT"
+        },
+        "mapping": "id"
+      }
     },
     "createdAt": {
       "type": "timestamp",
@@ -70,7 +75,7 @@ exports.up = function(db) {
   });
 };
 exports.down = function(db) {
-  return db.dropTable("order_items");
+  return db.dropTable(TABLE_NAME);
 };
 
 exports._meta = {

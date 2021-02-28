@@ -4,6 +4,10 @@ var dbm;
 var type;
 var seed;
 
+const TABLE_NAME = "product";
+const CATEGORIES_TABLE_NAME = require("./1-add-categories").TABLE_NAME;
+exports.TABLE_NAME = TABLE_NAME;
+
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
   * This enables us to not have to rely on NODE_PATH.
@@ -15,7 +19,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = async function(db) {
-  await db.createTable("products", {
+  await db.createTable(TABLE_NAME, {
     "id": {
       "type": "int",
       "primaryKey": true,
@@ -36,13 +40,13 @@ exports.up = async function(db) {
       "type": "real",
       "notNull": true
     },
-    "category_id": {
+    "categoryId": {
       "type": "int",
       "unique": false,
       "notNull": true,
       "foreignKey": {
         "name": "category_id_fk",
-        "table": "categories",
+        "table": CATEGORIES_TABLE_NAME,
         "rules": {
           "onDelete": "CASCADE",
           "onUpdate": "RESTRICT"
@@ -64,8 +68,8 @@ exports.up = async function(db) {
   });
 
   await db.insert(
-      "products",
-      ["name", "description", "price", "category_id", "createdAt", "updatedAt"],
+      TABLE_NAME,
+      ["name", "description", "price", "categoryId", "createdAt", "updatedAt"],
       ["Dummy product", "Sample product", 10.50, 1, new Date().toISOString(), new Date().toISOString()]
   );
 
@@ -74,7 +78,7 @@ exports.up = async function(db) {
 };
 
 exports.down = function(db) {
-  return db.dropTable("products");
+  return db.dropTable(TABLE_NAME);
 };
 
 exports._meta = {

@@ -4,6 +4,9 @@ var dbm;
 var type;
 var seed;
 
+const TABLE_NAME = "user";
+exports.TABLE_NAME = TABLE_NAME;
+
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
   * This enables us to not have to rely on NODE_PATH.
@@ -16,7 +19,7 @@ exports.setup = function(options, seedLink) {
 
 
 exports.up = function(db) {
-  return db.createTable("users", {
+  return db.createTable(TABLE_NAME, {
     "id": {
       "type": "int",
       "primaryKey": true,
@@ -58,7 +61,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return db.dropTable("users");
+  return db.dropTable(TABLE_NAME);
 };
 
 
