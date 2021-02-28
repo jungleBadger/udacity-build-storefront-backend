@@ -1,7 +1,9 @@
 "use strict";
 
 import { generateHash, compareHash, generateJWT } from "./security";
+import {USER_COLLECTION_REFERENCE, User, userModel} from "../models/User"
 import Database from "./Database";
+import sequelizeTableConfig from "../configs/sequelizeTableConfig";
 
 const DB_PREFIX = (process.env.NODE_ENV || "").toLowerCase() === "test" ? "TEST_" : "";
 const dbObject: any = new Database("postgres", {
@@ -12,34 +14,18 @@ const dbObject: any = new Database("postgres", {
     "port": process.env[`${DB_PREFIX}POSTGRES_PORT`]
 });
 
-interface User {
-    id: number,
-    username: string,
-    firstName: string,
-    lastName: string,
-    updatedAt: Date
-    password?: string,
-    createdAt?: Date
-}
 
 export default {
 
-    "User": dbObject.Client.define("user", {
-        "id": {
-            "type": dbObject.DataTypes.NUMBER,
-            "autoIncrement": true,
-            "primaryKey": true
-        },
-        "username": dbObject.DataTypes.TEXT,
-        "firstName": dbObject.DataTypes.TEXT,
-        "lastName": dbObject.DataTypes.TEXT,
-        "password": dbObject.DataTypes.TEXT
-    }),
-
+    "User": dbObject.Client.define(
+        USER_COLLECTION_REFERENCE,
+        userModel(),
+        sequelizeTableConfig
+    ),
 
     /**
      * Creates a new User.
-     * @method compareHash
+     * @method createUser
      * @async
      * @param {string} username - User's unique name - a sort of nickname.
      * @param {string} firstName - User's first name.
@@ -179,8 +165,6 @@ export default {
                 "message": `User ${userId} not found.`
             }));
         }
-
-
     },
 
 

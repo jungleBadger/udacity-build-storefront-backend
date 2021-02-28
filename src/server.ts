@@ -61,12 +61,6 @@ export async function run (CUSTOM_APP_PORT: number = 0, skipAdminAdd: boolean = 
 
      if (!skipAdminAdd) {
         try {
-            await users.retrieveUserInfo({
-                "username": process.env.ADMIN_USER || "admin",
-            });
-        } catch (e) {
-            // This is here only for development and testing purposes - of course an admin user wouldn't
-            // be added like this in a "real-world" app.
             await users.createUser(
                 process.env.ADMIN_USER || "admin",
                 "Daniel",
@@ -74,6 +68,9 @@ export async function run (CUSTOM_APP_PORT: number = 0, skipAdminAdd: boolean = 
                 process.env.ADMIN_PASSWORD || "admin123"
             );
             log("Default admin user created.");
+
+        } catch (e) {
+            log("Default admin already exists.");
         }
     }
 

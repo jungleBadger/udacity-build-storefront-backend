@@ -49,7 +49,7 @@ import products from "../../helpers/products";
  */
 router.post("/create",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await products.test());
+        return res.status(200).send(1);
     }
 );
 
@@ -159,7 +159,7 @@ router.get("/trending",
  */
 router.get("/trending",
     async (req: Request, res: Response) => {
-        return res.status(200).send(await products.test());
+        return res.status(200).send(1);
     }
 );
 
