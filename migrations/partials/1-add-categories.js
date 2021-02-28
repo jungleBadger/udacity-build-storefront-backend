@@ -14,8 +14,8 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-  return db.createTable("categories", {
+exports.up = async function(db) {
+  await db.createTable("categories", {
     "id": {
       "type": "int",
       "primaryKey": true,
@@ -44,6 +44,13 @@ exports.up = function(db) {
       "notNull": true
     }
   });
+
+  await db.insert(
+      "categories",
+      ["name", "description", "createdAt", "updatedAt"],
+      ["General category", "Sample category to hold default items", new Date().toISOString(), new Date().toISOString()]
+  );
+  return db;
 };
 exports.down = function(db) {
   return db.dropTable("categories");
