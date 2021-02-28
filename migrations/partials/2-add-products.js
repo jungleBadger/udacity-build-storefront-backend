@@ -14,8 +14,8 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-  return db.createTable("products", {
+exports.up = async function(db) {
+  await db.createTable("products", {
     "id": {
       "type": "int",
       "primaryKey": true,
@@ -27,8 +27,14 @@ exports.up = function(db) {
       "type": "string",
       "notNull": true
     },
+    "description": {
+      "type": "string",
+      "unique": false,
+      "notNull": false
+    },
     "price": {
-      "type": "int"
+      "type": "real",
+      "notNull": true
     },
     "category_id": {
       "type": "int",
@@ -56,6 +62,15 @@ exports.up = function(db) {
       "notNull": true
     }
   });
+
+  await db.insert(
+      "products",
+      ["name", "description", "price", "category_id", "createdAt", "updatedAt"],
+      ["Dummy product", "Sample product", 10.50, 1, new Date().toISOString(), new Date().toISOString()]
+  );
+
+  return db;
+
 };
 
 exports.down = function(db) {
