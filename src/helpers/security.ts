@@ -45,10 +45,10 @@ export function validateJWT(token: string, secret = "", options = {}): Promise<s
 
 		if (!token || (!secret && !process.env.APP_SECRET)) {
 			return reject(
-				JSON.stringify({
+				{
 					"status": 400,
 					"message": "Invalid params."
-				})
+				}
 			);
 		}
 
@@ -57,17 +57,17 @@ export function validateJWT(token: string, secret = "", options = {}): Promise<s
 				return resolve(decoded);
 			} else if (err === "invalid algorithm" || err === "jwt malformed") {
 				return reject(
-					JSON.stringify({
+					{
 						"status": 422,
 						"message": "Error parsing token."
-					})
+					}
 				);
 			} else {
 				return reject(
-					JSON.stringify({
+					{
 						"status": 401,
 						"message": "Unauthorized call."
-					})
+					}
 				);
 			}
 		}

@@ -11,7 +11,6 @@ import {run} from "../../../src/server";
 import users from "../../../src/helpers/users";
 import {Op} from "sequelize";
 
-
 const APP_PORT = 6096;
 const API_URL = `${process.env.LOCAL_HTTPS ? "https" : "http"}://localhost:${APP_PORT}/api`;
 let server: any;
@@ -19,9 +18,6 @@ let server: any;
 let user1: any;
 const user1Password: string = "123456";
 let validToken: string;
-
-
-
 
 
 describe("[User] - endpoints testing", function() {

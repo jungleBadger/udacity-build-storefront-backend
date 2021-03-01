@@ -6,11 +6,13 @@ import users from "../../../src/helpers/users";
 import { validateJWT } from "../../../src/helpers/security";
 import {Op} from "sequelize";
 
+import faker from "faker";
+
 const VALID_MODEL: any = {
-    "username": `${Date.now()}_USER_AUTHORIZE`,
-    "firstName": "TEST_USER",
-    "lastName": "TEST",
-    "rawPassword": "TEST_PASSWORD"
+    "username": faker.internet.userName(),
+    "firstName": faker.name.findName(),
+    "lastName": faker.name.findName(),
+    "rawPassword": faker.internet.password()
 };
 
 let createdUserModel: any;

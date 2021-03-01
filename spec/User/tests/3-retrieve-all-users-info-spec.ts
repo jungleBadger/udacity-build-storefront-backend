@@ -4,12 +4,12 @@ let dotEnvProps: Object = {};
 dotenv.config(dotEnvProps);
 import users from "../../../src/helpers/users";
 import {Op} from "sequelize";
-
+import faker from "faker";
 const VALID_MODEL: any = {
-    "username": `${Date.now()}_USER`,
-    "firstName": "TEST_USER",
-    "lastName": "TEST",
-    "rawPassword": "TEST_PASSWORD"
+    "username": faker.internet.userName(),
+    "firstName": faker.name.findName(),
+    "lastName": faker.name.findName(),
+    "rawPassword": faker.internet.password()
 };
 
 let createdUserModel: any;
@@ -21,16 +21,16 @@ describe("[User] - retrieveAllUserInfo method testing", function() {
         // create base admin user
         await Promise.all([
             users.createUser(
-                `${VALID_MODEL.username}_SAMPLE_01`,
-                VALID_MODEL.firstName,
-                VALID_MODEL.lastName,
-                VALID_MODEL.rawPassword
+                faker.internet.userName(),
+                faker.name.findName(),
+                faker.name.findName(),
+                faker.internet.password()
             ),
             users.createUser(
-                `${VALID_MODEL.username}_SAMPLE_02`,
-                VALID_MODEL.firstName,
-                VALID_MODEL.lastName,
-                VALID_MODEL.rawPassword
+                faker.internet.userName(),
+                faker.name.findName(),
+                faker.name.findName(),
+                faker.internet.password()
             )
         ]);
     });

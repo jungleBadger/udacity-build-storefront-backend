@@ -3,6 +3,7 @@
 import {Router, Request, Response} from "express";
 const router: Router = Router();
 import products from "../../helpers/products";
+import {parseJWT, validateJWT} from "../middlewares/auth";
 
 
 /**
@@ -23,18 +24,24 @@ import products from "../../helpers/products";
  *        description: The Product's name.
  *        schema:
  *          type: string
+ *      - name: description
+ *        in: body
+ *        required: false
+ *        description: The Product's description.
+ *        schema:
+ *          type: string
  *      - name: price
  *        in: body
  *        required: true
  *        description: The Product's price.
  *        schema:
  *          type: number
- *      - name: category
+ *      - name: categoryId
  *        in: body
  *        required: true
  *        description: The Product's category.
  *        schema:
- *          type: string
+ *          type: number
  *     responses:
  *       201:
  *         description: Product created.
@@ -48,8 +55,15 @@ import products from "../../helpers/products";
  *         description: Error handler.
  */
 router.post("/create",
+    parseJWT,
+    validateJWT,
     async (req: Request, res: Response) => {
-        return res.status(200).send(1);
+        return res.status(201).send(await products.createProduct(
+            req.body.name,
+            req.body.description,
+            req.body.price,
+            req.body.categoryId
+        ));
     }
 );
 
@@ -70,7 +84,9 @@ router.post("/create",
  */
 router.get("/",
     async (req: Request, res: Response) => {
-        return res.status(200).send(1);
+        return res.status(200).send(
+            await products.retrieveAllProductsInfo()
+        );
     }
 );
 
@@ -100,7 +116,79 @@ router.get("/",
  */
 router.get("/:productId",
     async (req: Request, res: Response) => {
-        return res.status(200).send(1);
+        return res.status(200).send(
+            await products.retrieveProductInfo(
+                {
+                    "id": Number(req.params.productId)
+                }
+            )
+        );
+
+    }
+);
+
+
+/**
+ * @swagger
+ * /api/products/categories/:categoryId
+ *   get:
+ *     tags: [Products]
+ *     summary: List the products from a given category.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *      - name: categoryId
+ *        in: path
+ *        required: true
+ *        description: The target Category ID.
+ *        schema:
+ *          type: string
+ *      - name: limit
+ *        in: query
+ *        required: false
+ *        description: The limit parameter.
+ *        default: 10
+ *        schema:
+ *          type: string
+ *      - name: offset
+ *        in: query
+ *        required: false
+ *        description: The offset parameter.
+ *        default: 0
+ *        schema:
+ *          type: string
+ *      - name: orderBy
+ *        in: query
+ *        required: false
+ *        description: The order field.
+ *        default: name
+ *        schema:
+ *          type: string
+ *      - name: orderDirection
+ *        in: query
+ *        required: false
+ *        description: The order direction.
+ *        default: ASC
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: An array of products from a given category.
+ *       404:
+ *         description: Category not found.
+ *       500:
+ *         description: Error handler.
+ */
+router.get("/categories/:categoryId",
+    async (req: Request, res: Response) => {
+        return res.status(200).send(
+            await products.retrieveProductsByCategory(
+                Number(req.params.categoryId),
+                Number(req.query.limit || 10),
+                Number(req.query.offset || 0),
+                [req.query.orderBy as string || "name", (req.query.orderDirection as string || "ASC").toUpperCase()]
+            )
+        );
     }
 );
 
@@ -129,37 +217,55 @@ router.get("/:productId",
  */
 router.get("/trending",
     async (req: Request, res: Response) => {
-        return res.status(200).send(1);
+        return res.status(200).send(
+            await products.retrieveProductsByCategory(
+                Number(req.params.categoryId),
+                Number(req.query.limit || 10),
+                Number(req.query.offset || 0),
+                ["", (req.query.orderDirection as string || "ASC").toUpperCase()]
+            )
+        );
     }
 );
 
 
+
 /**
  * @swagger
- * /api/products/categories/:categoryId
- *   get:
+ * /api/products/:productId
+ *   delete:
  *     tags: [Products]
- *     summary: List the products from a given category.
+ *     summary: Delete a specific product.
+ *     security:
+ *      - bearerAuth: []
  *     produces:
  *       - application/json
  *     parameters:
- *      - name: categoryId
+ *      - name: productId
  *        in: path
  *        required: true
- *        description: The target Category ID.
+ *        description: The Product's ID.
  *        schema:
  *          type: string
  *     responses:
  *       200:
- *         description: An array of products from a given category.
+ *         description: Operation status.
+ *       401:
+ *         description: Invalid API token.
+ *       403:
+ *         description: Expired or denied API token.
  *       404:
- *         description: Category not found.
+ *         description: Product not found.
  *       500:
  *         description: Error handler.
  */
-router.get("/trending",
+router.delete("/:productId",
+    parseJWT,
+    validateJWT,
     async (req: Request, res: Response) => {
-        return res.status(200).send(1);
+        return res.status(200).send(
+            await products.deleteProduct(Number(req.params.productId))
+        );
     }
 );
 

@@ -1,7 +1,8 @@
 "use strict";
 
+import {USER_COLLECTION_REFERENCE, User, userModel} from "../models/User";
 import { generateHash, compareHash, generateJWT } from "./security";
-import {USER_COLLECTION_REFERENCE, User, userModel} from "../models/User"
+
 import Database from "./Database";
 import sequelizeTableConfig from "../configs/sequelizeTableConfig";
 
@@ -139,7 +140,7 @@ export default {
      * @method deleteUser
      * @async
      * @param {number} userId - User's unique row ID.
-     * @return {Promise<string|Error>} Containing the created User object.
+     * @return {Promise<string|Error>} Containing the operation status.
      */
     "deleteUser": async function (
         userId: number
@@ -151,11 +152,11 @@ export default {
             }));
         }
 
-         let operationStatus = await (this.User.destroy({
+         let operationStatus = await this.User.destroy({
              "where": {
                  "id": userId
              }
-        }));
+        });
 
         if (operationStatus) {
             return `User ${userId} deleted.`;
