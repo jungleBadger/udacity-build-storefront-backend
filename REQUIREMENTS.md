@@ -3,7 +3,8 @@ The company stakeholders want to create an online storefront to showcase their g
 
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
-## API Endpoints
+## API Endpoints - proposal
+
 #### Products
 - Index 
 - Show
@@ -19,6 +20,23 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Orders
 - Current Order by user (args: user id)[token required]
 - [OPTIONAL] Completed Orders by user (args: user id)[token required]
+
+## API Endpoints - implementation
+
+#### Products
+- Index - `GET /api/products`
+- Show - `GET /api/products/:productId`
+- Create [token required] - `POST /api/products/create`
+- [OPTIONAL] Products by category (args: product category) - `GET /api/products/categories/:categoryId`
+
+#### Users
+- Index [token required] `GET /api/users`
+- Show [token required] `GET /api/products/:userId`
+- Create N[token required] `POST /api/products`
+
+#### Orders
+- Current Order by user (args: user id)[token required] `GET /api/orders/byUser/:userId/active`
+
 
 ## Data Shapes
 #### Product
@@ -39,4 +57,9 @@ These are the notes from a meeting with the frontend developer that describe wha
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+## Data shapes implementation
+
+![Data modeling](./root/images/data-modeling.png "Data modeling")
+
 

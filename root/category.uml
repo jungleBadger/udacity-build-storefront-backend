@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.category</OriginalElement>
+  <nodes>
+    <node x="172.0" y="259.0">2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.order</node>
+    <node x="0.0" y="237.0">2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.product</node>
+    <node x="369.0" y="0.0">2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.migrations</node>
+    <node x="172.0" y="0.0">2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.user</node>
+    <node x="0.0" y="22.0">2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.category</node>
+    <node x="79.5" y="474.0">2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.orderProduct</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.product" target="2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.category">
+      <point x="0.0" y="-93.5" />
+      <point x="0.0" y="71.5" />
+    </edge>
+    <edge source="2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.orderProduct" target="2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.order">
+      <point x="41.25" y="-82.5" />
+      <point x="203.25" y="449.0" />
+      <point x="248.0" y="449.0" />
+      <point x="0.0" y="71.5" />
+    </edge>
+    <edge source="2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.order" target="2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.user">
+      <point x="0.0" y="-71.5" />
+      <point x="0.0" y="93.5" />
+    </edge>
+    <edge source="2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.orderProduct" target="2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.product">
+      <point x="-41.25" y="-82.5" />
+      <point x="120.75" y="449.0" />
+      <point x="76.0" y="449.0" />
+      <point x="0.0" y="93.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="250.5" y="146.5" />
+  <SelectedNodes>
+    <node>2c741cf6-7c17-4e29-a110-605c89614fc3.TABLE:db.public.category</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+

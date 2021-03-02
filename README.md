@@ -1,5 +1,105 @@
 # Storefront Backend Project
 
+## Student section
+
+### Installing dependencies
+
+1. Install the dependencies with `npm install`.
+2. Execute the `docker-compose.yml` through Docker.
+
+
+### Add the environment variables
+
+There is a `.env_model` file attached.
+
+1. Create a new file named `.env`
+2. Add/modify the following values
+
+| Variable    | Default value |
+|-------------|---------------|
+| APP_PORT    | 3000          |
+| LOCAL_HTTPS | false         |
+| DEBUG       | app:*         |
+| POSTGRES_USER       |          |
+| POSTGRES_PASSWORD       |          |
+| POSTGRES_HOST_URL       |          |
+| POSTGRES_PORT       |     5432     |
+| POSTGRES_DB       |       db   |
+| TEST_POSTGRES_USER       |          |
+| TEST_POSTGRES_PASSWORD       |          |
+| TEST_POSTGRES_HOST_URL       |     localhost     |
+| TEST_POSTGRES_PORT       |       5433   |
+| TEST_POSTGRES_DB       |      db    |
+| ADMIN_USER       |      admin    |
+| ADMIN_PASSWORD       |      test321    |
+
+
+### Running DB migrations
+
+To instantiate the DB you need to:
+
+1. Make sure Postgres is up and running, and the env is set as described above
+2. Execute the commands described below
+
+#### Up test and dev environments
+
+```
+npm run db:create:test
+npm run db:create:dev
+```
+
+
+#### Destroy test and dev environments
+
+```
+npm run db:destroy:test
+npm run db:destroy:dev
+```
+
+
+![Data modeling](./root/images/data-modeling.png "Data modeling")
+
+
+### Running tests
+
+#### Unit tests
+
+You can execute jasmine tests by executing the following command `npm run test`
+
+![Unit testing](./root/images/unit-tests.png "Unit testing")
+
+
+
+#### Postman tests
+
+You can import the [POSTman JSON collection](spec/storefront.postman_collection.json) to test the endpoints directly.
+
+![POSTman testing](./root/images/postman-tests.png "POSTman testing")
+
+
+### Executing the app
+
+To start the app you can execute the following command: `npm start`
+
+
+### Required endpoints implementation
+
+#### Products
+- Index - `GET /api/products`
+- Show - `GET /api/products/:productId`
+- Create [token required] - `POST /api/products/create`
+- [OPTIONAL] Products by category (args: product category) - `GET /api/products/categories/:categoryId`
+
+#### Users
+- Index [token required] `GET /api/users`
+- Show [token required] `GET /api/products/:userId`
+- Create N[token required] `POST /api/products`
+
+#### Orders
+- Current Order by user (args: user id)[token required] `GET /api/orders/byUser/:userId/active`
+
+
+
 ## Getting Started
 
 This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
