@@ -21,17 +21,27 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.createTable(TABLE_NAME, {
-    "id": {
+
+    "orderId": {
       "type": "int",
       "primaryKey": true,
-      "autoIncrement": true,
-      "unique": true,
-      "notNull": true
+      "unique": false,
+      "notNull": true,
+      "foreignKey": {
+        "name": "order_id_fk",
+        "table": ORDERS_TABLE_NAME,
+        "rules": {
+          "onDelete": "CASCADE",
+          "onUpdate": "RESTRICT"
+        },
+        "mapping": "id"
+      }
     },
     "productId": {
       "type": "int",
       "unique": false,
       "notNull": true,
+      "primaryKey": true,
       "foreignKey": {
         "name": "product_id_fk",
         "table": PRODUCTS_TABLE_NAME,
@@ -47,20 +57,6 @@ exports.up = function(db) {
       "unique": false,
       "notNull": true,
       "defaultValue": 0
-    },
-     "orderId": {
-      "type": "int",
-      "unique": false,
-      "notNull": true,
-      "foreignKey": {
-        "name": "order_id_fk",
-        "table": ORDERS_TABLE_NAME,
-        "rules": {
-          "onDelete": "CASCADE",
-          "onUpdate": "RESTRICT"
-        },
-        "mapping": "id"
-      }
     },
     "createdAt": {
       "type": "timestamp",

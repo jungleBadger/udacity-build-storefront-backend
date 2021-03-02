@@ -1,6 +1,6 @@
 "use strict";
 
-import {USER_COLLECTION_REFERENCE, User, userModel} from "../models/User";
+import {USER_TABLE_REFERENCE, User, userModel} from "../models/User";
 import { generateHash, compareHash, generateJWT } from "./security";
 
 import Database from "./Database";
@@ -19,7 +19,7 @@ const dbObject: any = new Database("postgres", {
 export default {
 
     "User": dbObject.Client.define(
-        USER_COLLECTION_REFERENCE,
+        USER_TABLE_REFERENCE,
         userModel(),
         sequelizeTableConfig
     ),
@@ -47,26 +47,22 @@ export default {
            }));
         }
 
-        const isUserExistent = await this.retrieveUserInfo(
-            {
-                username
-            },
-            false,
-            true
-        );
-
-        if (isUserExistent) {
-            throw new Error(JSON.stringify({
-                "status": 409,
-                "message": `User ${username} already exists.`
-            }));
-        } else {
+        try {
             return (await this.User.create({
                 "username": username,
                 "firstName": firstName,
                 "lastName": lastName,
                 "password": await generateHash(rawPassword)
             })).toJSON();
+        } catch (e) {
+            if (e.name === "SequelizeUniqueConstraintError") {
+                throw new Error(JSON.stringify({
+                    "status": 409,
+                    "message": `User ${username} already exists.`
+                }));
+            } else {
+                throw e;
+            }
         }
     },
 

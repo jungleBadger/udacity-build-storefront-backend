@@ -2,14 +2,14 @@
 
 import {DataTypes} from "sequelize";
 
-export const PRODUCTS_COLLECTION_REFERENCE = "product";
+export const PRODUCTS_TABLE_REFERENCE = "product";
 
 export interface Product {
     id: number,
     name: string,
     description: string,
     price: number,
-    category_id: number,
+    categoryId: number,
     createdAt?: Date,
     updatedAt?: Date
 }

@@ -1,10 +1,9 @@
 "use strict";
 
-import {PRODUCTS_COLLECTION_REFERENCE, Product, productModel} from "../models/Product";
+import {PRODUCTS_TABLE_REFERENCE, Product, productModel} from "../models/Product";
 
 import Database from "./Database";
 import sequelizeTableConfig from "../configs/sequelizeTableConfig";
-import {User} from "../models/User";
 
 const DB_PREFIX = process.env.NODE_ENV === "TEST" ? "TEST_" : "";
 const dbObject: any = new Database("postgres", {
@@ -19,12 +18,14 @@ const dbObject: any = new Database("postgres", {
 
 export default {
 
-    "Product": dbObject.Client.define(
-        PRODUCTS_COLLECTION_REFERENCE,
-        productModel(),
-        sequelizeTableConfig
-    ),
-
+    "Product": (() => {
+        let model = dbObject.Client.define(
+            PRODUCTS_TABLE_REFERENCE,
+            productModel(),
+            sequelizeTableConfig
+        );
+        return model;
+    })(),
 
     /**
      * Creates a new Product.

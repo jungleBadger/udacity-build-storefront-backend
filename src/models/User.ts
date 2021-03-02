@@ -2,7 +2,7 @@
 
 import {DataTypes} from "sequelize";
 
-export const USER_COLLECTION_REFERENCE = "user";
+export const USER_TABLE_REFERENCE = "user";
 
 export interface User {
     id: number,
